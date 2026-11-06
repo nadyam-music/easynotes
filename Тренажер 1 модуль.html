@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Нотный тренажёр</title>
 <script src="https://cdn.jsdelivr.net/npm/opensheetmusicdisplay@1.9.3/build/opensheetmusicdisplay.min.js"></script>
 <style>
@@ -282,12 +283,300 @@
   }
   .reset-btn:hover{background:var(--ink);color:var(--paper);}
 </style>
+
+<style id="warm-design-system">
+  :root{
+    --paper:#f7f1ed;
+    --ink:#493a37;
+    --line:#806b65;
+    --accent:#a96f75;
+    --accent-soft:#ead3d2;
+    --good:#58785f;
+    --bad:#a94f4f;
+    --panel:#efe3df;
+    --panel-border:#ddc9c3;
+    --surface:#fffaf7;
+    --muted:#887671;
+    --shadow:0 8px 24px rgba(91,65,59,.07);
+  }
+
+  body{
+    font-family:Inter, "Segoe UI", Arial, sans-serif;
+    background:
+      radial-gradient(ellipse at 12% 0%, rgba(234,211,210,.42), transparent 36%),
+      var(--paper);
+    color:var(--ink);
+    padding:22px clamp(12px,2.2vw,32px) 44px;
+    gap:12px;
+  }
+
+  .topbar{
+    align-items:stretch;
+    gap:14px;
+    margin:0 auto 2px;
+    padding:16px;
+    background:rgba(255,250,247,.82);
+    border:1px solid var(--panel-border);
+    border-radius:16px;
+    box-shadow:var(--shadow);
+  }
+  .topbar-col{justify-content:center; gap:10px;}
+  .topbar-left{flex:1.15; min-width:280px;}
+  .topbar-center{flex:1; min-width:280px; gap:8px;}
+  .topbar-right{flex:0 1 250px; align-items:stretch; justify-content:center;}
+
+  h1{
+    font-family:Georgia, "Times New Roman", serif;
+    font-size:clamp(1.25rem,2vw,1.65rem);
+    font-weight:600;
+    letter-spacing:-.025em;
+    margin:0 0 4px;
+    white-space:normal;
+    color:#5a403e;
+  }
+
+  .level-row{gap:10px;}
+  .level-toggle{
+    background:#f4eae6;
+    border:1px solid var(--panel-border);
+    border-radius:10px;
+    padding:5px;
+    gap:3px;
+  }
+  .level-toggle button{
+    min-width:32px;
+    min-height:32px;
+    border-radius:7px;
+    font-family:inherit;
+    font-size:.82rem;
+    font-weight:600;
+  }
+  .level-toggle button.active{
+    background:#8e5d63;
+    color:#fffaf7;
+    box-shadow:0 2px 5px rgba(91,55,59,.16);
+  }
+
+  .score-row{gap:12px; justify-content:center;}
+  .score{gap:clamp(12px,2vw,22px); color:#624d49;}
+  .score b{font-size:1.2rem; color:#503d3a;}
+  .score span,.progress-text{color:var(--muted);}
+  .score-actions{justify-content:center; gap:7px;}
+
+  .reset-btn{
+    border:1px solid #cdb6b0;
+    background:#fffaf7;
+    color:#6d514e;
+    border-radius:8px;
+    padding:8px 11px;
+    font-family:inherit;
+    font-size:.74rem;
+    transition:background .15s, border-color .15s, transform .15s;
+  }
+  .reset-btn:hover{
+    background:#f0e1de;
+    border-color:#b98f91;
+    color:#553e3d;
+  }
+  .reset-btn:active,.midi-btn:active{transform:translateY(1px);}
+
+  .progress-wrap{width:min(280px,100%); max-width:100%; margin:5px auto 0;}
+  .progress-bar-bg{background:#eadbd6; height:9px; border-radius:99px;}
+  .progress-bar-fill{background:#8eaa8b; border-radius:99px;}
+
+  .midi-panel{gap:7px;}
+  .midi-btn{
+    border:1px solid #95666b;
+    background:#95666b;
+    color:#fffaf7;
+    border-radius:9px;
+    padding:9px 13px;
+    font-family:inherit;
+    font-size:.82rem;
+    font-weight:600;
+    transition:background .15s, transform .15s;
+  }
+  .midi-btn:hover{background:#795057;color:#fffaf7;}
+  .midi-btn.connected{background:#58785f;border-color:#58785f;color:white;}
+  #midiDeviceSelect{
+    border:1px solid var(--panel-border);
+    border-radius:8px;
+    padding:7px 9px;
+    background:var(--surface);
+    color:var(--ink);
+    font-family:inherit;
+  }
+  .midi-status{color:var(--muted); max-width:190px;}
+  .midi-status.live{color:var(--good);}
+
+  .panel-box{
+    max-width:none;
+    background:#f3e9e5;
+    border:1px solid var(--panel-border);
+    border-radius:11px;
+    padding:12px 14px;
+    color:#6e5954;
+    font-size:.76rem;
+    line-height:1.5;
+  }
+  .panel-box h3{font-size:.83rem;color:#5a403e;margin-bottom:6px;}
+
+  #feedback{
+    min-height:30px;
+    height:auto;
+    padding:3px 8px;
+    margin:0 0 2px;
+    font-size:1rem;
+    font-style:normal;
+    font-weight:600;
+  }
+  #feedback.good{color:var(--good);}
+  #feedback.bad{color:var(--bad);}
+
+  .stave-wrap,.keyboard-wrap{
+    width:min(1700px,100%);
+    background:#ffffff;
+    border:1px solid var(--panel-border);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+  }
+  .stave-wrap{
+    padding:clamp(14px,2vw,26px);
+    margin:0 auto 4px;
+  }
+  .keyboard-wrap{
+    padding:16px 12px 12px;
+    margin:0 auto;
+  }
+
+  .white-key{
+    background:#ffffff;
+    border-color:#b9aaa4;
+    color:#a18f88;
+  }
+  .white-key:hover{background:#f7eeeb;}
+  .white-key:active,.white-key.pressed,
+  .white-key.middle-c:active,.white-key.middle-c.pressed{background:#e9c9ca;}
+  .white-key.middle-c{color:#98636a;border-bottom-color:#98636a;}
+  .black-key{background:#554744;}
+  .black-key:hover{background:#735c58;}
+  .black-key:active,.black-key.pressed{background:#a96f75;}
+
+  button:focus-visible,select:focus-visible{
+    outline:3px solid rgba(169,111,117,.35);
+    outline-offset:2px;
+  }
+
+  @media (max-width:900px){
+    .topbar{display:grid;grid-template-columns:1fr 1fr;}
+    .topbar-left{grid-column:1/-1;}
+    .topbar-center{min-width:0;}
+    .topbar-right{min-width:0;}
+  }
+  @media (max-width:600px){
+    body{padding:12px 9px 28px;gap:9px;}
+    .topbar{display:flex;flex-direction:column;padding:13px;gap:14px;border-radius:12px;}
+    .topbar-left,.topbar-center,.topbar-right{min-width:0;width:100%;align-items:stretch;}
+    .topbar-center{order:2;}
+    .topbar-right{order:3;}
+    .score-row{justify-content:space-between;}
+    .score{justify-content:space-around;flex:1;}
+    .score-actions{justify-content:flex-start;}
+    .level-row{align-items:flex-start;flex-direction:column;}
+    .midi-panel{width:100%;}
+    .panel-box{font-size:.75rem;}
+    .stave-wrap{padding:12px 8px;border-radius:10px;}
+    .keyboard-wrap{padding:12px 8px;border-radius:10px;}
+    #feedback{font-size:.92rem;}
+  }
+  /* Keep the 88-key geometry identical across all viewport widths. */
+  .keyboard{width:max-content;min-width:max-content;flex-wrap:nowrap;}
+  .keyboard > .white-key{flex:0 0 30px;width:30px;height:140px;}
+  .keyboard > .black-key{width:18px;height:88px;}
+  .keyboard-wrap{overflow-x:auto;overflow-y:hidden;}
+</style>
+
+
+<style id="fit-screen-and-fullscreen">
+  html,body{height:100%;height:100dvh;}
+  body{
+    height:100vh;height:100dvh;min-height:0;overflow:hidden;
+    padding:8px 12px 10px;gap:5px;
+  }
+  .heading-row{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;}
+  .heading-row h1{margin:0;}
+  .fullscreen-btn{
+    flex-shrink:0;border:1px solid #cdb6b0;border-radius:8px;
+    background:#fffaf7;color:#6d514e;padding:7px 10px;
+    font:600 .76rem Inter,'Segoe UI',Arial,sans-serif;cursor:pointer;
+  }
+  .fullscreen-btn:hover{background:#f0e1de;}
+  .topbar{flex:0 0 auto;margin:0 auto;padding:9px 12px;gap:8px;}
+  .topbar-col{gap:5px;}
+  .level-row{gap:7px;}
+  .level-toggle{padding:3px;}
+  .level-toggle button{min-height:28px;min-width:28px;padding:3px 6px;}
+  .midi-btn{padding:7px 10px;}
+  .score-row{gap:6px;}
+  .score{gap:13px;}
+  .score b{font-size:1rem;}
+  .score-actions{gap:4px;}
+  .reset-btn{padding:5px 8px;}
+  .progress-wrap{margin:2px auto 0;}
+  .panel-box{padding:7px 9px;font-size:.7rem;line-height:1.3;}
+  .panel-box h3{margin-bottom:2px;}
+  #feedback{flex:0 0 auto;min-height:20px;height:auto;margin:0;padding:0 6px;font-size:.9rem;line-height:1.2;}
+  .stave-wrap{
+    flex:1 1 auto;min-height:0;max-height:none;
+    margin:0 auto;padding:8px 12px;
+    overflow-x:auto;overflow-y:hidden;
+  }
+  .keyboard-wrap{flex:0 0 auto;margin:0 auto;padding:8px 10px;}
+  /* Key widths stay fixed: the black-key placement depends on actual white-key geometry. */
+  .keyboard > .white-key{height:clamp(72px,17dvh,140px);}
+  .keyboard > .black-key{height:clamp(45px,10.7dvh,88px);}
+  @media(max-width:900px){
+    .topbar{display:flex;flex-wrap:wrap;gap:7px;}
+    .topbar-left{flex:1 1 100%;min-width:0;}
+    .topbar-center{flex:1 1 340px;min-width:0;}
+    .topbar-right{flex:1 1 220px;min-width:0;}
+    .panel-box{max-width:none;}
+  }
+  @media(max-width:600px){
+    body{padding:5px 6px 6px;gap:3px;}
+    .topbar{display:flex;flex-direction:column;gap:6px;padding:7px 9px;}
+    .topbar-left,.topbar-center,.topbar-right{width:100%;}
+    .level-row{flex-direction:row;align-items:center;}
+    .topbar-right{display:none;}
+    .score-row{flex-wrap:wrap;}
+    .keyboard-wrap{padding:5px 7px;}
+    .stave-wrap{padding:5px 7px;}
+    .midi-status{max-width:120px;}
+    .fullscreen-btn{padding:5px 8px;}
+  }
+  @media(max-height:700px){
+    .topbar-right{display:none;}
+    .topbar{padding:6px 9px;}
+    .keyboard > .white-key{height:clamp(60px,15dvh,105px);}
+    .keyboard > .black-key{height:clamp(38px,9.5dvh,66px);}
+  }
+  @media(max-height:480px){
+    .topbar-center .progress-wrap{display:none;}
+    .topbar{gap:3px;}
+    .topbar-left{flex:1 1 auto;}
+    .topbar-center{flex:1 1 auto;}
+    .midi-status{display:none;}
+    .keyboard > .white-key{height:58px;}
+    .keyboard > .black-key{height:36px;}
+  }
+</style>
+
 </head>
 <body>
 
 <div class="topbar">
   <div class="topbar-col topbar-left">
-    <h1>Нотный тренажёр</h1>
+    <div class="heading-row"><h1>Нотный тренажёр</h1><button type="button" class="fullscreen-btn" id="fullscreenBtn" aria-label="Развернуть на весь экран" title="Развернуть на весь экран">⛶ На весь экран</button></div>
     <div class="level-row">
       <div class="level-toggle" id="levelToggle"></div>
       <div class="midi-panel" id="midiPanel">
@@ -632,7 +921,7 @@ async function renderFullSequence(retryCount){
   try{
     const xml = buildMusicXML(currentSequence);
     await osmd.load(xml);
-    osmd.zoom = 2.0; // load() resets zoom internally, so it must be set again after every load()
+    osmd.zoom = window.innerHeight < 750 ? 1.875 : (window.innerHeight < 950 ? 2.25 : 3.0); // Responsive stave height, preserving horizontal note scrolling
     const container = document.getElementById('osmd-container');
     container.style.width = Math.max(2400, currentSequence.length * 220) + "px";
     osmd.render();
@@ -705,12 +994,11 @@ function buildKeyboard(){
 
   // position black keys absolutely; skip after the very last white key (C8 has no C#8)
   requestAnimationFrame(()=>{
-    const keyWidth = whiteKeys[0].el.offsetWidth;
     whiteKeys.forEach((wk, i)=>{
       if(BLACK_AFTER[wk.letter] && i < whiteKeys.length - 1){
         const black = document.createElement('div');
         black.className = 'black-key';
-        black.style.left = (i*keyWidth + keyWidth*0.68) + "px";
+        black.style.left = (wk.el.offsetLeft + wk.el.offsetWidth*0.68) + "px";
         kb.appendChild(black);
         const sharpNote = wk.letter+"#"+wk.oct;
         black.dataset.note = sharpNote;
@@ -975,6 +1263,9 @@ function refreshDeviceList(){
   if(inputs.length === 0){
     midiStatus.textContent = "инструмент не найден — подключите USB/Bluetooth MIDI и нажмите кнопку снова";
     midiSelect.style.display = "none";
+    attachToInputs([]);
+    midiBtn.classList.remove('connected');
+    midiBtn.textContent = "Подключить MIDI";
     return;
   }
   inputs.forEach((inp, i)=>{
@@ -988,7 +1279,7 @@ function refreshDeviceList(){
   attachToInputs([selectedInput]);
   midiStatus.textContent = "подключено: " + (selectedInput.name || "MIDI-устройство");
   midiBtn.classList.add('connected');
-  midiBtn.textContent = "MIDI подключён";
+  midiBtn.textContent = "Миди подключено";
 }
 
 midiSelect.addEventListener('change', ()=>{
@@ -1011,6 +1302,8 @@ midiBtn.addEventListener('click', async ()=>{
     midiAccess.onstatechange = refreshDeviceList;
   } catch(err){
     midiStatus.textContent = "доступ к MIDI не разрешён";
+    midiBtn.classList.remove('connected');
+    midiBtn.textContent = "Подключить MIDI";
   }
 });
 
@@ -1033,6 +1326,34 @@ if(document.readyState === "complete"){
 } else {
   window.addEventListener('load', startFirstRender);
 }
+</script>
+
+<script id="fullscreen-controls">
+(function(){
+  const btn=document.getElementById('fullscreenBtn');
+  const supported=!!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen);
+  if(!supported){btn.title='Полноэкранный режим недоступен в этом браузере';btn.disabled=true;return;}
+  function sync(){
+    const active=!!(document.fullscreenElement || document.webkitFullscreenElement);
+    btn.textContent=active?'⤢ Выйти из полного экрана':'⛶ На весь экран';
+    btn.setAttribute('aria-label',active?'Выйти из полного экрана':'Развернуть на весь экран');
+  }
+  btn.addEventListener('click',async()=>{
+    try{
+      if(document.fullscreenElement || document.webkitFullscreenElement){
+        if(document.exitFullscreen)await document.exitFullscreen();
+        else if(document.webkitExitFullscreen)document.webkitExitFullscreen();
+      }else{
+        if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();
+        else if(document.documentElement.webkitRequestFullscreen)document.documentElement.webkitRequestFullscreen();
+      }
+    }catch(e){console.warn('Fullscreen unavailable:',e);}
+    sync();
+  });
+  document.addEventListener('fullscreenchange',sync);
+  document.addEventListener('webkitfullscreenchange',sync);
+  sync();
+})();
 </script>
 </body>
 </html>
