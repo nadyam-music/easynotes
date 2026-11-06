@@ -56,15 +56,17 @@
   }
   .bkey.dim{ filter:brightness(2.6) opacity(.6); }
   .wkey.center-mark::after{
-    content:'';
+    content:'До1';
     position:absolute;
-    top:10px;
+    bottom:12px;
     left:50%;
     transform:translateX(-50%);
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    background:#e6394a;
+    color:#c92d40;
+    font-size:clamp(10px, 1.15vw, 14px);
+    font-weight:800;
+    white-space:nowrap;
+    line-height:1.2;
+    pointer-events:none;
   }
   .octave-bracket{
     position:absolute; border-left:2px solid #8a93ad; border-right:2px solid #8a93ad; border-bottom:2px solid #8a93ad;
@@ -104,6 +106,44 @@
   .overlay-btn.primary{background:var(--accent); color:#111;}
   .overlay-btn.ghost{background:transparent; border:1px solid #3a4257; color:var(--ink);}
   #confettiCanvas{position:fixed; inset:0; z-index:101; pointer-events:none; display:none;}
+
+  /* Игровая палитра курса «Ноты — легко»: оформление без изменений механики */
+  :root{--bg:#fff6ee;--panel:#fffdfb;--accent:#e98a79;--good:#329b73;--bad:#df6474;--ink:#593d3b;}
+  body{background:radial-gradient(circle at 8% 12%,#ffe0d4 0,transparent 29%),radial-gradient(circle at 94% 5%,#fbe4aa 0,transparent 27%),linear-gradient(160deg,#fffaf2,#f9e8e3 70%,#f7e9db);color:var(--ink);padding:22px 12px 28px;}
+  h1{font-size:clamp(26px,3vw,36px);font-weight:800;letter-spacing:-.035em;color:#76453f;text-shadow:0 2px 0 #fff;}
+  p.sub{color:#996e68;font-size:15px;margin:3px 0 19px;}
+  #hud{gap:10px;margin-bottom:17px;}
+  #hud span{background:#fffaf7;border:1px solid #eed3c8;border-radius:999px;color:#85564e;font-weight:750;padding:10px 16px;box-shadow:0 3px 0 #f0d9ce;}
+  #levels{gap:7px;flex-wrap:wrap;justify-content:center;}
+  .level-btn{background:#fffdf9;border:2px solid #edd2c7;color:#815b55;border-radius:999px;padding:9px 15px;font-weight:750;box-shadow:0 3px 0 #edd9d0;transition:transform .15s,background .15s,box-shadow .15s;}
+  .level-btn:hover,#restart:hover,#fullscreenBtn:hover,.overlay-btn:hover{transform:translateY(-2px);}
+  .level-btn.active{background:#e98a79;border-color:#d76f63;color:#fff;box-shadow:0 4px 0 #b95e57;}
+  #restart,#fullscreenBtn{border-radius:999px;padding:10px 17px;font-weight:750;transition:transform .15s;}
+  #restart{background:#f1ad60;color:#593d3b;border:2px solid #e99c4b;box-shadow:0 3px 0 #d99143;}
+  #fullscreenBtn{background:#fffdf9;color:#815b55;border:2px solid #edd2c7;box-shadow:0 3px 0 #edd9d0;}
+  #fullscreenBtn.active{background:#e98a79;color:white;border-color:#d76f63;}
+  #board{background:linear-gradient(180deg,#fffdfa,#fff8f3);border:3px solid #f1d8ca;border-radius:26px;padding:clamp(12px,2vw,24px);box-shadow:0 10px 0 #e9cbbf,0 24px 45px rgba(132,81,69,.15);}
+  .note-card{filter:drop-shadow(0 5px 4px rgba(115,74,63,.18));}
+  .wkey{background:#fff;border-color:#9c8982;box-shadow:inset 0 -7px 0 #f1e9e3;}
+  .wkey.dim{background:#c9bdb7;filter:brightness(.94) saturate(.75);}
+  .wkey.correct{background:#73d9b2!important;box-shadow:inset 0 -7px 0 #49b98f!important;}
+  .wkey.wrong{background:#f38b98!important;box-shadow:inset 0 -7px 0 #dd6877!important;}
+  .bkey{background:linear-gradient(90deg,#34302f,#171717 60%,#3b3533);box-shadow:2px 3px 3px #79645a55;}
+  .wkey.center-mark::after{color:#c64e56;background:#fff1e9;border-radius:7px;padding:2px 4px;bottom:11px;}
+  .octave-bracket{border-color:#bc8e82;}
+  .octave-label{color:#966c61;font-weight:650;}
+  #msg{color:#328d69;font-size:18px;}
+  #overlay{background:rgba(70,40,45,.58);backdrop-filter:blur(6px);}
+  .overlay-card{background:linear-gradient(160deg,#fffefa,#fff0e9);border:3px solid #f1d1c1;border-radius:28px;max-width:470px;padding:35px 30px;box-shadow:0 12px 0 #d7aaa0,0 28px 70px #3e242c55;}
+  .overlay-emoji{font-size:62px;}
+  .overlay-title{color:#784841;font-size:27px;}
+  .overlay-title.good{color:#278e68;}
+  .overlay-title.bad{color:#c94e64;}
+  .overlay-text{color:#805e58;font-size:17px;}
+  .overlay-btn{border-radius:999px;transition:transform .15s;}
+  .overlay-btn.primary{background:#e98a79;color:white;border:2px solid #d66c61;box-shadow:0 4px 0 #b75a51;}
+  .overlay-btn.ghost{background:white;border:2px solid #e9c9bd;color:#80534b;box-shadow:0 4px 0 #e9d7ce;}
+  @media(max-width:650px){#hud{gap:8px}.level-btn{padding:8px 11px;font-size:12px}#restart,#fullscreenBtn{font-size:12px;padding:9px 12px}#board{border-radius:17px;padding:10px}.overlay-card{padding:27px 18px}}
 </style>
 </head>
 <body>
@@ -458,7 +498,7 @@ function attachDrag(n){
         playTone(n.note);
         placeCardOnKey(n);
         if(correct===total){
-          msgEl.textContent = '🎉 Отлично! Все ноты найдены верно!';
+          msgEl.textContent = mistakeMade ? 'Все ноты расставлены. Посмотрим результат.' : '🎉 Все ноты найдены без ошибок!';
           setTimeout(showLevelEnd, 600);
         }
       } else {
@@ -491,9 +531,9 @@ const overlayCloseBtn = document.getElementById('overlayCloseBtn');
 function showLevelEnd(){
   if(mistakeMade){
     overlayEmoji.textContent = '😔';
-    overlayTitle.textContent = 'Мне жаль, но были ошибки';
+    overlayTitle.textContent = 'Мне жаль, но были ошибки.';
     overlayTitle.className = 'overlay-title bad';
-    overlayText.textContent = 'Давай попробуем еще раз!';
+    overlayText.textContent = 'Давай попробуем еще раз';
     overlayMainBtn.textContent = 'Попробовать еще раз';
     overlayMainBtn.onclick = ()=>{ hideLevelEnd(); startGame(); };
   } else {
@@ -502,7 +542,7 @@ function showLevelEnd(){
     overlayTitle.className = 'overlay-title good';
     const isLast = currentLevel >= Object.keys(LEVELS).length;
     overlayText.textContent = isLast
-      ? 'Ты прошла все уровни — просто блестяще! Начнем сначала?'
+      ? 'Все ноты четырёх октав расставлены верно! Пять уровней позади — поздравляем с завершением игры!'
       : 'Переходи к следующему уровню';
     overlayMainBtn.textContent = isLast ? 'Играть снова' : 'Следующий уровень';
     overlayMainBtn.onclick = ()=>{
